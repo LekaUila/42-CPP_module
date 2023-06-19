@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 13:04:53 by lflandri          #+#    #+#             */
-/*   Updated: 2022/12/05 18:36:50 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/06/19 12:22:26 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int main(int ac, char **av)
 			ind++;
 		}
 		std::cout << toprint;
+		if (ac != i + 1)
+			std::cout << std::endl;
 		i++;
 	}
 	std::cout << std::endl;
