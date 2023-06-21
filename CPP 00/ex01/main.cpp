@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 18:58:15 by lflandri          #+#    #+#             */
-/*   Updated: 2022/12/08 16:57:08 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:21:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ int main(void)
 		std::cout << "\e[0;36mEnter your order : \e[0;m" << std::endl;
 		//std::cin >> command;
 		//std::cin.getline(command, 2000000, '\n');
-		command = get_enter();
+		std::getline(std::cin, command);
+		if (std::cin.eof())
+			break;
+		//command = get_enter();
 		if (command == "ADD")
 			pbook.ADD();
 		else if (command == "SEARCH")
