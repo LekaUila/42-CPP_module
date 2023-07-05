@@ -6,7 +6,7 @@
 #    By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/28 11:10:23 by lflandri          #+#    #+#              #
-#    Updated: 2023/01/19 10:47:53 by lflandri         ###   ########.fr        #
+#    Updated: 2023/07/05 11:22:00 by lflandri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,9 @@ NAME 		= ex00-BraiiiiiiinnnzzzZ
 MAKEFLAGS	= --no-print-directory
 
 SRC 		=	main.cpp\
-				Zombie.cpp
+				Zombie.cpp\
+				randomChump.cpp\
+				newZombie.cpp
 
 
 #couleur
