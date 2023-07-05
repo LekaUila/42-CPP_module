@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 15:47:38 by lflandri          #+#    #+#             */
-/*   Updated: 2022/12/08 14:46:53 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:46:48 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 #include <fstream>
 #include <string>
 
-//NON FONCTIONNEL
-
-
-int main(int ac, char **av)
+int ft_Replace(char **av)
 {
 	std::string	file;
 	char		c;
@@ -25,13 +22,8 @@ int main(int ac, char **av)
 	std::string	old;
 	std::string	news;
 	size_t		i;
-	size_t		j;
+	//size_t		j;
 	
-	if (ac != 4)
-	{
-		std::cout << "\e[0;31mError : BadNumber of arguments\e[0;m" << std::endl;
-		return (1);
-	}
 	file = av[1];
 	news = av[3];
 	old = av[2];
@@ -53,6 +45,8 @@ int main(int ac, char **av)
 	{
 		txt += c;
 	}
+
+	/* C version : just for memory
 	i = 0;
 	while (i != txt.size())
 	{
@@ -75,8 +69,35 @@ int main(int ac, char **av)
 		else
 			i++;
 	}
+	*/
+	/* C++ version : to use*/
+	i = 0;
+	while (i != txt.size() && i != std::string::npos && !news.empty())
+	{
+		i = txt.find(old, i);
+		if (i != std::string::npos)
+		{
+			txt.erase(i, old.size());
+			txt.insert(i, news);
+			i += news.size();
+		}
+	}
+	/**/
 	file_output << txt;
 
 	file_input.close();
 	file_output.close();
+	return (0);
+}
+
+int main(int ac, char **av)
+{
+	
+	if (ac != 4)
+	{
+		std::cout << "\e[0;31mError : BadNumber of arguments\e[0;m" << std::endl;
+		return (1);
+	}
+	return (ft_Replace(av));
+
 }
