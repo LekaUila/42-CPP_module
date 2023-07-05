@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 11:08:48 by lflandri          #+#    #+#             */
-/*   Updated: 2022/12/07 13:52:38 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:26:50 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,4 @@ void randomChump( std::string name )
 {
 	Zombie	zombzomb(name);
 	zombzomb.announce();
-}
-
-Zombie* zombieHorde( int N, std::string name )
-{
-	Zombie *horde = new Zombie[N];
-	int i = 0;
-
-	while (i != N)
-	{
-		horde[i].setname(name);
-		i++;
-	}
-
-	return (horde);
 }

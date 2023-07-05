@@ -6,7 +6,7 @@
 #    By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/28 11:10:23 by lflandri          #+#    #+#              #
-#    Updated: 2023/01/19 10:47:59 by lflandri         ###   ########.fr        #
+#    Updated: 2023/07/05 11:26:31 by lflandri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ NAME 		= ex01-More-Brain!
 MAKEFLAGS	= --no-print-directory
 
 SRC 		=	main.cpp\
-				Zombie.cpp
+				Zombie.cpp\
+				zombieHorde.cpp
 
 
 #couleur
