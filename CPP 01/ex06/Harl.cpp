@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 19:28:09 by lflandri          #+#    #+#             */
-/*   Updated: 2023/01/26 15:38:40 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:52:44 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void Harl::complain_filter( std::string level )
 				/*FALLTHRU*/
 			case 3:
 				this->error();
+				break;
+			default :
 				break;
 			}
 			break;
