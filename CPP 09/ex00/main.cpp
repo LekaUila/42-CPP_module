@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:31:54 by lflandri          #+#    #+#             */
-/*   Updated: 2023/06/23 13:55:19 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/07/06 16:46:32 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 
 int main(void)
 {
-
+	BitcoinExchange btc;
 	return (0);
 }
