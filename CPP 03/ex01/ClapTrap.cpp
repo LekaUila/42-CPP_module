@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 16:02:53 by lflandri          #+#    #+#             */
-/*   Updated: 2023/01/19 13:41:35 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:16:59 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void ClapTrap::attack(const std::string& target)
 
 void ClapTrap::takeDamage(unsigned int amount)
 {
-	int	new_life;
+	unsigned int	new_life;
 
 	if (this->__Hit_Points == 0)
 	{
@@ -73,7 +73,7 @@ void ClapTrap::takeDamage(unsigned int amount)
 		return ;
 	}
 	new_life = this->__Hit_Points - amount;
-	if (new_life < 0)
+	if (this->__Hit_Points < amount )
 	{
 		new_life = 0;
 	}
@@ -103,7 +103,7 @@ std::string ClapTrap::get_name() const
 	return (this->__Name);
 }
 
-int ClapTrap::get_hp() const
+unsigned int ClapTrap::get_hp() const
 {
 	return(this->__Hit_Points);
 }

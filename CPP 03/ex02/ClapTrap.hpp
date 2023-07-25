@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:56:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/01/19 13:43:55 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:16:12 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ private:
 
 protected:
 
-	std::string	__Name;
-	int			__Hit_Points;
-	int			__Energy_points;
-	int			__Attack_Damage;
+	std::string		__Name;
+	unsigned int	__Hit_Points;
+	int				__Energy_points;
+	int				__Attack_Damage;
 
 	ClapTrap(std::string name, int hp, int ep, int atk);
 
@@ -41,7 +41,7 @@ public:
 	void takeDamage(unsigned int amount);
 	void beRepaired(unsigned int amount);
 	std::string get_name() const;
-	int get_hp() const;
+	unsigned int get_hp() const;
 	int get_ep() const;
 	int get_atk() const;
 	

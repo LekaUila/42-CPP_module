@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:34:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/07/06 16:49:05 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/07/11 13:10:35 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,7 +297,7 @@ bool BitcoinExchange::DateBitcoin::strIsADateFormat(std::string str)
 {
 	if (!BitcoinExchange::DateBitcoin::hasOnlyDateCharacters(str) or str.empty())
 		return (false);
-
+	std::cout << "test1" << std::endl;
 	size_t i = 0;
 	size_t n_pos;
 	if (str.at(i) == '-' && str.at(i + 1) != '-')
@@ -308,16 +308,20 @@ bool BitcoinExchange::DateBitcoin::strIsADateFormat(std::string str)
 	{
 		return (false);
 	}
+	std::cout << "test2" << std::endl;
 	n_pos = str.find("-",i);
 	if (n_pos == std::string::npos)
 		return (false);
+	std::cout << "test3" << std::endl;
 	i = n_pos;
 	n_pos = str.find("-",i);
 	if (n_pos == i + 1 || n_pos == std::string::npos)
 		return (false);
+	std::cout << "test4" << std::endl;
 	i = n_pos;
 	n_pos = str.find("-",i);
 	if (n_pos != std::string::npos)
 		return (false);
+	std::cout << "test5" << std::endl;
 	return (true);
 }
