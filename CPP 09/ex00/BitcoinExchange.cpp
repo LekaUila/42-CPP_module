@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:34:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/07/11 13:10:35 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/07 17:00:23 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@ static bool isNumber(char c)
 BitcoinExchange::BitcoinExchange()
 {
 	std::ifstream datafile(DATA_FILENAME, std::ios::in);
+    if (!datafile.is_open())
+    {
+        std::string err_str = "BitcoinExchange ||EXEPTION|| : can't access csv database (\"";
+        err_str += DATA_FILENAME;
+        err_str += "\")";
+        throw std::runtime_error((const char *)err_str.c_str());
+    }
+
 	std::string line = "";
 	std::string separator;
 	char c = 42;
@@ -36,7 +44,8 @@ BitcoinExchange::BitcoinExchange()
 	}
 	try
 	{
-		BitcoinExchange::getSeparatorDateValue(line);
+		separator = BitcoinExchange::getSeparatorDateValue(line, "exchange_rate");
+        //std::cout << "spearator : " << separator << std::endl;
 	}
 	catch(const std::exception& e)
 	{
@@ -53,13 +62,18 @@ BitcoinExchange::BitcoinExchange()
 			{
 				std::string date = "";
 				std::string value = "";
-				int sep_pos = line.find(separator);
+				size_t sep_pos = line.find(separator);
+                if (sep_pos == std::string::npos)
+                    throw std::invalid_argument("BitcoinExchange ||EXEPTION|| : can't find a separator who math the actual separator");
 				date = line;
+                //std::cout << "line : " << line << std::endl;
 				date.erase(sep_pos, std::string::npos);
 				value = line;
 				value.erase(0, sep_pos + separator.size());
 
+                //std::cout << "date : " << date << std::endl;
 				BitcoinExchange::DateBitcoin date_o(date);
+                //std::cout << "value : " << value << std::endl;
 				double value_d = this->convertValueData(value);
 				this->data[date_o] = value_d;
 			}
@@ -86,7 +100,7 @@ double BitcoinExchange::convertValueData(std::string value)
 			count_p++;
 		if (count_p > 1)
 			throw std::invalid_argument("BitcoinExchange::DateBitcoin ||EXEPTION|| : invalid value");
-		i = pos;
+		i = pos + (pos != std::string::npos);
 	}
 	i = 0;
 	while (i != value.size())
@@ -113,22 +127,101 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& x)
 	return (*this);
 }
 
-std::string BitcoinExchange::getSeparatorDateValue(std::string str)
+std::string BitcoinExchange::getSeparatorDateValue(std::string str, std::string snd_name)
 {
 	size_t date_pos = 0;
 	size_t value_pos = 0;
 	char tab[999];
 
 	date_pos = str.find("date", 0);
-	value_pos = str.find("exchange_rate", 0);
+	value_pos = str.find(snd_name, 0);
 	if (date_pos == std::string::npos || value_pos == std::string::npos || date_pos + 4 >= value_pos)
 	{
 		throw std::invalid_argument("BitcoinExchange ||EXEPTION|| : invalid format of separator");
 	}
 	if (value_pos - (date_pos + 4) > 990)
 		throw std::invalid_argument("BitcoinExchange ||EXEPTION|| : separator to long");
-	str.copy(tab, value_pos - (date_pos + 4));
+	str.copy(tab, value_pos - (date_pos + 4), 4);
+    tab[value_pos - (date_pos + 4)] = 0;
 	return (tab);
+}
+
+void BitcoinExchange::printLigne(const std::pair<BitcoinExchange::DateBitcoin, double> &p)
+{
+    std::cout << "{" << p.first.getYear()<< "-" << p.first.getMonth()<< "-" << p.first.getDay()  << " : " << p.second << "}" << std::endl;
+}
+
+void BitcoinExchange::printData() const
+{
+    std::for_each(this->data.begin(), this->data.end(), BitcoinExchange::printLigne);
+}
+
+void BitcoinExchange::exchange(char * filename) const
+{
+    std::ifstream datafile(filename, std::ios::in);
+    if (!datafile.is_open())
+    {
+        std::string err_str = "Error: could not open file.";
+        throw std::runtime_error((const char *)err_str.c_str());
+    }
+	std::string line = "";
+	std::string separator;
+    std::map<BitcoinExchange::DateBitcoin, double> input_data;
+    
+	char c = 42;
+	
+	while (datafile.get(c))
+	{
+		line +=c;
+		if (c == '\n')
+			break;
+	}
+	try
+	{
+		separator = BitcoinExchange::getSeparatorDateValue(line, "value");
+	}
+	catch(const std::exception& e)
+	{
+		datafile.close();
+		throw std::invalid_argument(e.what());
+	}
+	line = "";
+	while (datafile.get(c))
+	{
+		
+		if (c == '\n')
+		{
+			try
+			{
+				std::string date = "";
+				std::string value = "";
+				int sep_pos = line.find(separator);
+                if (sep_pos == std::string::npos)
+                    throw std::invalid_argument("BitcoinExchange ||EXEPTION|| : can't find a separator who math the actual separator");
+				date = line;
+                std::cout << "line : " << line << std::endl;
+				date.erase(sep_pos, std::string::npos);
+				value = line;
+				value.erase(0, sep_pos + separator.size());
+
+                std::cout << "date : " << date << std::endl;
+				BitcoinExchange::DateBitcoin date_o(date);
+                std::cout << "value : " << value << std::endl;
+				double value_d = this->convertValueData(value);
+				input_data[date_o] = value_d;
+			}
+			catch(const std::exception& e)
+			{
+				datafile.close();
+				throw std::invalid_argument(e.what());
+			}
+			line = "";
+		}
+		else
+			line += c;
+	}
+
+    std::for_each(input_data.begin(), input_data.end(), BitcoinExchange::printLigne);
 }
 
 /*=========================BitcoinExchange::DateBitcoin=========================*/
@@ -141,32 +234,36 @@ BitcoinExchange::DateBitcoin::DateBitcoin(std::string str)
 	std::string year = "";
 	std::string month = "";
 	std::string day = "";
-	char tab[999] = {0};
+	char tab1[999] = {0};
+    char tab2[999] = {0};
+    char tab3[999] = {0};
 	size_t i = 0;
 	size_t n_pos;
 	if (str.at(i) == '-')
 	{
 		i++;
 	}
-	n_pos = str.find("-",i);
+	n_pos = str.find("-",i) + 1;
 	if (n_pos - i > 990)
 		throw std::invalid_argument("BitcoinExchange::DateBitcoin ||EXEPTION|| : line to long : " + str);
-	str.copy(tab, n_pos - i, i);
-	year = tab;
+	str.copy(tab1, n_pos - i, i);
+	year = tab1;
 	i = n_pos;
-	n_pos = str.find("-",i);
+	n_pos = str.find("-",i) + 1;
 	if (n_pos - i > 990)
 		throw std::invalid_argument("BitcoinExchange::DateBitcoin ||EXEPTION|| : line to long : " + str);
-	str.copy(tab, n_pos - i, i);
-	month = tab;
+	str.copy(tab2, n_pos - i, i);
+	month = tab2;
 	i = n_pos;
 	if (n_pos - i > 990)
 		throw std::invalid_argument("BitcoinExchange::DateBitcoin ||EXEPTION|| : line to long : " + str);
-	str.copy(tab, str.size() - i, i);
-	day = tab;
+	str.copy(tab3, str.size() - i, i);
+	day = tab3;
+    //std::cout << "day : " << day << " month : " << month << " year : " << year << std::endl;  
 	this->day = atoi(day.c_str());
 	this->month = atoi(month.c_str());
 	this->year = atoi(year.c_str());
+    //std::cout << "day : " << this->day << " month : " << this->month << " year : " << this->year << std::endl;  
 	if (str.at(i) == '-')
 		this->year *= -1;
 	if (this->month < 1 || this->month > 12)
@@ -283,6 +380,7 @@ int	BitcoinExchange::DateBitcoin::getDay() const
 bool BitcoinExchange::DateBitcoin::hasOnlyDateCharacters(std::string str)
 {
 	size_t i = 0;
+   
 	while (i != str.size())
 	{
 		if (!isNumber(str.at(i)) && str.at(i) != '-')
@@ -297,7 +395,7 @@ bool BitcoinExchange::DateBitcoin::strIsADateFormat(std::string str)
 {
 	if (!BitcoinExchange::DateBitcoin::hasOnlyDateCharacters(str) or str.empty())
 		return (false);
-	std::cout << "test1" << std::endl;
+	//std::cout << "test1" << std::endl;
 	size_t i = 0;
 	size_t n_pos;
 	if (str.at(i) == '-' && str.at(i + 1) != '-')
@@ -308,20 +406,20 @@ bool BitcoinExchange::DateBitcoin::strIsADateFormat(std::string str)
 	{
 		return (false);
 	}
-	std::cout << "test2" << std::endl;
+	//std::cout << "test2" << std::endl;
 	n_pos = str.find("-",i);
 	if (n_pos == std::string::npos)
 		return (false);
-	std::cout << "test3" << std::endl;
+	//std::cout << "test3" << std::endl;
 	i = n_pos;
 	n_pos = str.find("-",i);
 	if (n_pos == i + 1 || n_pos == std::string::npos)
 		return (false);
-	std::cout << "test4" << std::endl;
-	i = n_pos;
+	//std::cout << "test4" << std::endl;
+	/*i = n_pos;
 	n_pos = str.find("-",i);
 	if (n_pos != std::string::npos)
 		return (false);
-	std::cout << "test5" << std::endl;
+	std::cout << "test5" << std::endl;*/
 	return (true);
 }

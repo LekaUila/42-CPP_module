@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:34:42 by lflandri          #+#    #+#             */
-/*   Updated: 2023/07/06 16:45:59 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:32:58 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fstream>
 # include <string>
 # include <stdlib.h>
+#include <algorithm>
 # define DATA_FILENAME "data.csv"
 
 class BitcoinExchange 
@@ -73,7 +74,11 @@ public:
 	BitcoinExchange (const BitcoinExchange &obj);				//copie constructor
 	BitcoinExchange& operator=(const BitcoinExchange& x);		//assignation constructor
 
-	static std::string getSeparatorDateValue(std::string str);
+	static std::string getSeparatorDateValue(std::string str, std::string snd_name);
 	static double convertValueData(std::string value);
+    static void printLigne(const std::pair<BitcoinExchange::DateBitcoin, double> &p);
+    void printData() const;
+    void exchange(char *filename) const;
 };
+
 #endif
