@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:34:42 by lflandri          #+#    #+#             */
-/*   Updated: 2023/08/07 16:32:58 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:23:12 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@
 # include <fstream>
 # include <string>
 # include <stdlib.h>
-#include <algorithm>
+# define __STDC_LIMIT_MACROS
+# include <stdint.h>
+# include <algorithm>
+# define SHOW_DATA 0
+# define SHOW_LOGIC_DATA 0
 # define DATA_FILENAME "data.csv"
 
 class BitcoinExchange 

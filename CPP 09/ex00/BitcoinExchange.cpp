@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:34:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/08/07 17:00:23 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:39:45 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ BitcoinExchange::BitcoinExchange()
 	try
 	{
 		separator = BitcoinExchange::getSeparatorDateValue(line, "exchange_rate");
-        //std::cout << "spearator : " << separator << std::endl;
 	}
 	catch(const std::exception& e)
 	{
@@ -66,14 +65,11 @@ BitcoinExchange::BitcoinExchange()
                 if (sep_pos == std::string::npos)
                     throw std::invalid_argument("BitcoinExchange ||EXEPTION|| : can't find a separator who math the actual separator");
 				date = line;
-                //std::cout << "line : " << line << std::endl;
 				date.erase(sep_pos, std::string::npos);
 				value = line;
 				value.erase(0, sep_pos + separator.size());
 
-                //std::cout << "date : " << date << std::endl;
 				BitcoinExchange::DateBitcoin date_o(date);
-                //std::cout << "value : " << value << std::endl;
 				double value_d = this->convertValueData(value);
 				this->data[date_o] = value_d;
 			}
@@ -185,43 +181,75 @@ void BitcoinExchange::exchange(char * filename) const
 		datafile.close();
 		throw std::invalid_argument(e.what());
 	}
-	line = "";
-	while (datafile.get(c))
+
+	while (datafile)
 	{
-		
-		if (c == '\n')
-		{
+	    line = "";
+        std::getline(datafile, line);
+        if (!line.empty())
+        {
 			try
 			{
+                std::map<BitcoinExchange::DateBitcoin, double>::const_iterator logic_data;
 				std::string date = "";
 				std::string value = "";
-				int sep_pos = line.find(separator);
+				size_t sep_pos = line.find(separator);
                 if (sep_pos == std::string::npos)
-                    throw std::invalid_argument("BitcoinExchange ||EXEPTION|| : can't find a separator who math the actual separator");
+                {
+                    std::string error_str = "Error: bad input => ";
+                    error_str += line;
+                    throw std::invalid_argument(error_str);
+                }
 				date = line;
-                std::cout << "line : " << line << std::endl;
 				date.erase(sep_pos, std::string::npos);
 				value = line;
 				value.erase(0, sep_pos + separator.size());
-
-                std::cout << "date : " << date << std::endl;
+                try
+                {
+                    BitcoinExchange::DateBitcoin date_o(date);
+                }
+                catch(const std::exception& e)
+                {
+                    std::string error_str = "Error: bad input => ";
+                    error_str += line;
+                    throw std::invalid_argument(error_str);
+                }
+                
 				BitcoinExchange::DateBitcoin date_o(date);
-                std::cout << "value : " << value << std::endl;
-				double value_d = this->convertValueData(value);
-				input_data[date_o] = value_d;
+                double value_d = 0.0;
+                try
+                {
+                    value_d = this->convertValueData(value);
+                }
+                catch(const std::exception& e)
+                {
+                    throw std::invalid_argument("Error: not a positive number");
+                }
+                if (value_d > INT32_MAX)
+                    throw std::invalid_argument("Error: too large a number.");
+                input_data[date_o] = value_d;
+                logic_data = this->data.lower_bound(date_o);
+                if (logic_data == this->data.end())
+                {
+                    std::string error_str = "Error: No argument to match => ";
+                    error_str += date;
+                    throw std::invalid_argument(error_str);
+                }
+                if (SHOW_LOGIC_DATA)
+                {
+                                std::cout << "logic data : " << logic_data->first.getYear()<< "-" << logic_data->first.getMonth() << "-"
+                        << logic_data->first.getDay
+                        () << " | " << logic_data->second << std::endl;        
+                }
+                std::cout << date << " => " <<  value_d << " = " << value_d * logic_data->second << std::endl;
 			}
 			catch(const std::exception& e)
 			{
-				datafile.close();
-				throw std::invalid_argument(e.what());
+				std::cerr << e.what() << std::endl;
 			}
 			line = "";
 		}
-		else
-			line += c;
-	}
-
-    std::for_each(input_data.begin(), input_data.end(), BitcoinExchange::printLigne);
+    }
 }
 
 /*=========================BitcoinExchange::DateBitcoin=========================*/
@@ -239,9 +267,11 @@ BitcoinExchange::DateBitcoin::DateBitcoin(std::string str)
     char tab3[999] = {0};
 	size_t i = 0;
 	size_t n_pos;
+    int neg = 1;
 	if (str.at(i) == '-')
 	{
 		i++;
+        neg = -1;
 	}
 	n_pos = str.find("-",i) + 1;
 	if (n_pos - i > 990)
@@ -258,14 +288,11 @@ BitcoinExchange::DateBitcoin::DateBitcoin(std::string str)
 	if (n_pos - i > 990)
 		throw std::invalid_argument("BitcoinExchange::DateBitcoin ||EXEPTION|| : line to long : " + str);
 	str.copy(tab3, str.size() - i, i);
-	day = tab3;
-    //std::cout << "day : " << day << " month : " << month << " year : " << year << std::endl;  
+	day = tab3;  
 	this->day = atoi(day.c_str());
 	this->month = atoi(month.c_str());
-	this->year = atoi(year.c_str());
-    //std::cout << "day : " << this->day << " month : " << this->month << " year : " << this->year << std::endl;  
-	if (str.at(i) == '-')
-		this->year *= -1;
+	this->year = atoi(year.c_str());  
+	this->year *= neg;
 	if (this->month < 1 || this->month > 12)
 		throw std::invalid_argument("BitcoinExchange::DateBitcoin ||EXEPTION|| : invalid month");
 	if (this->month != 2 || this->year % 4)
@@ -303,7 +330,7 @@ int BitcoinExchange::DateBitcoin::operator==(const BitcoinExchange::DateBitcoin 
 	return (this->year == other.getYear() && this->day == other.getDay() && this->month == other.getMonth());
 }
 
-int BitcoinExchange::DateBitcoin::operator<=(const BitcoinExchange::DateBitcoin &other) const
+int BitcoinExchange::DateBitcoin::operator>=(const BitcoinExchange::DateBitcoin &other) const
 {
 	if (this->year < other.getYear())
 		return (1);
@@ -317,7 +344,7 @@ int BitcoinExchange::DateBitcoin::operator<=(const BitcoinExchange::DateBitcoin 
 		return (1);
 	return (0);
 }
-int BitcoinExchange::DateBitcoin::operator>=(const BitcoinExchange::DateBitcoin &other) const
+int BitcoinExchange::DateBitcoin::operator<=(const BitcoinExchange::DateBitcoin &other) const
 {
 	if (this->year > other.getYear())
 		return (1);
@@ -335,7 +362,7 @@ int BitcoinExchange::DateBitcoin::operator!=(const BitcoinExchange::DateBitcoin 
 {
 	return (this->year != other.getYear() || this->day != other.getDay() || this->month != other.getMonth());
 }
-int BitcoinExchange::DateBitcoin::operator>(const BitcoinExchange::DateBitcoin &other) const
+int BitcoinExchange::DateBitcoin::operator<(const BitcoinExchange::DateBitcoin &other) const
 {
 	if (this->year > other.getYear())
 		return (1);
@@ -349,7 +376,7 @@ int BitcoinExchange::DateBitcoin::operator>(const BitcoinExchange::DateBitcoin &
 		return (1);
 	return (0);
 }
-int BitcoinExchange::DateBitcoin::operator<(const BitcoinExchange::DateBitcoin &other) const
+int BitcoinExchange::DateBitcoin::operator>(const BitcoinExchange::DateBitcoin &other) const
 {
 	if (this->year < other.getYear())
 		return (1);
@@ -395,7 +422,6 @@ bool BitcoinExchange::DateBitcoin::strIsADateFormat(std::string str)
 {
 	if (!BitcoinExchange::DateBitcoin::hasOnlyDateCharacters(str) or str.empty())
 		return (false);
-	//std::cout << "test1" << std::endl;
 	size_t i = 0;
 	size_t n_pos;
 	if (str.at(i) == '-' && str.at(i + 1) != '-')
@@ -406,20 +432,12 @@ bool BitcoinExchange::DateBitcoin::strIsADateFormat(std::string str)
 	{
 		return (false);
 	}
-	//std::cout << "test2" << std::endl;
 	n_pos = str.find("-",i);
 	if (n_pos == std::string::npos)
 		return (false);
-	//std::cout << "test3" << std::endl;
 	i = n_pos;
 	n_pos = str.find("-",i);
 	if (n_pos == i + 1 || n_pos == std::string::npos)
 		return (false);
-	//std::cout << "test4" << std::endl;
-	/*i = n_pos;
-	n_pos = str.find("-",i);
-	if (n_pos != std::string::npos)
-		return (false);
-	std::cout << "test5" << std::endl;*/
 	return (true);
 }
