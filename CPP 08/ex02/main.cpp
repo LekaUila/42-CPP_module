@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 13:43:40 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/10 18:01:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/08 21:24:26 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 int main(void)
 {
-
 std::cout << "MutanStack :" << std::endl;
 
 MutantStack<int> mstack;
@@ -63,6 +62,10 @@ std::cout << *itl << std::endl;
 ++itl;
 }
 std::list<int> l2(l1);
+
+MutantStack<int>	stack;
+
+std::cout << (stack.begin() == stack.end()) << std::endl;
 
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 13:45:01 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/10 17:55:39 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/08 21:22:43 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,12 @@ public:
 	MutantStack<T>::iterator end()
 	{
 		MutantStack<T> tempo;
+
+		if (this->size() == 0)
+		{
+			MutantStack<T>::iterator ret(*this,(void *)&(this->top()));
+			return (ret);
+		}
 
 		while (this->size() - 1)
 		{
