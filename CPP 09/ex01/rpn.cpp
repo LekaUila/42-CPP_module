@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 17:09:08 by lflandri          #+#    #+#             */
-/*   Updated: 2023/08/08 20:27:14 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/08 21:01:09 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,8 @@ static void rpnSystem(std::string str, bool show_details)
 	}
 	if (number_stack.size() > 1)
 		throw std::invalid_argument("Error : The stack has more than one element at the end of the calcul : Check your calculation.");
+	if (number_stack.size() == 0)
+		throw std::invalid_argument("Error : The stack is empty.");
 	std::cout << "Result of your calculation : \e[1;32m" << number_stack.top() << "\e[0;m" << std::endl;
 	
 	
@@ -176,7 +178,7 @@ static void rpnSystem(std::string str, bool show_details)
 
 int main(int ac, char **av)
 {
-	if (ac < 2)
+	if (ac < 2 or av[1][0] == 0)
 	{
 		std::cout << "Error : No Calculation to do : " << std::endl 
 			<< "here is a reminder of use : ./RPN \"\e[1;34myour_calculation\e[0;m\" \"\e[1;34mshow_calculation : \e[0;32myes\e[1;34m or \e[0;31mno\e[1;34m (default : \e[0;31mno\e[1;34m)\e[0;m\"" << std::endl
