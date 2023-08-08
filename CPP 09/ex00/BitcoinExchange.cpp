@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:34:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/08/08 16:39:45 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/08 17:00:12 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,8 @@ std::string BitcoinExchange::getSeparatorDateValue(std::string str, std::string 
 		throw std::invalid_argument("BitcoinExchange ||EXEPTION|| : separator to long");
 	str.copy(tab, value_pos - (date_pos + 4), 4);
     tab[value_pos - (date_pos + 4)] = 0;
+    if (BitcoinExchange::DateBitcoin::hasDateCharacters(tab))
+       throw std::invalid_argument("BitcoinExchange ||EXEPTION|| : invalid format of separator");
 	return (tab);
 }
 
@@ -416,6 +418,22 @@ bool BitcoinExchange::DateBitcoin::hasOnlyDateCharacters(std::string str)
 	}
 	
 	return (true);
+}
+
+bool BitcoinExchange::DateBitcoin::hasDateCharacters(std::string str)
+{
+	size_t i = 0;
+   
+	while (i != str.size())
+	{
+		if (isNumber(str.at(i)) || str.at(i) == '-')
+        {
+            return (true);
+        }
+		i++;
+	}
+	
+	return (false);
 }
 
 bool BitcoinExchange::DateBitcoin::strIsADateFormat(std::string str)

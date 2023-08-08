@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:34:42 by lflandri          #+#    #+#             */
-/*   Updated: 2023/08/08 16:23:12 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:52:55 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ private:
 		int	getDay() const;
 
 		static bool hasOnlyDateCharacters(std::string str);
+        static bool hasDateCharacters(std::string str);
 		static bool strIsADateFormat(std::string str);
 
 	
