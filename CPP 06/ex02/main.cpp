@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:12:57 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/07 16:38:23 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/15 13:49:52 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,37 +34,37 @@ Base * generate(void)
 
 void identify(Base* p)
 {
-	try
 	{
-		A &lol = dynamic_cast< A& > (*p);
-		std::cout << "Type : A" << std::endl;
-		(void) lol;
-	}
-	catch(const std::exception& e1)
-	{
-		(void) e1;
-		try
+		A *lol = dynamic_cast< A* > (p);
+		if (lol != NULL)
 		{
-			B &lol = dynamic_cast< B& > (*p);
+			std::cout << "Type : A" << std::endl;
+			(void) lol;
+			return ;
+		}
+	}
+	{
+
+		B *lol = dynamic_cast< B* > (p);
+		if (lol != NULL)
+		{
 			std::cout << "Type : B" << std::endl;
 			(void) lol;
-		}
-		catch(const std::exception& e2)
-		{
-			(void) e2;
-			try
-			{
-				C &lol = dynamic_cast< C& > (*p);
-				std::cout << "Type : C" << std::endl;
-				(void) lol;
-			}
-			catch(const std::exception& e3)
-			{
-				(void) e3;
-				std::cout << "I don't know what is this this, but go fuck yourself. I can only reconised A, B and C." << std::endl;
-			}
+			return ;
 		}
 	}
+	{
+		C *lol = dynamic_cast< C* > (p);
+		if (lol != NULL)
+		{
+			std::cout << "Type : C" << std::endl;
+			(void) lol;
+			return ;
+		}
+	}
+	std::cout << "I don't know what is this this, but go fuck yourself. I can only reconised A, B and C." << std::endl;
+
+
 }
 
 void identify(Base& p)

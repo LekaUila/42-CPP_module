@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 15:12:54 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/15 13:40:57 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/15 13:45:19 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ char float_to_char(float f)
 
 int float_to_int(float f)
 {
-	if (INT32_MAX < f || f < INT32_MIN)
+	if (static_cast<double>(INT32_MAX) < f || f < static_cast<double>(INT32_MIN))
 		throw std::invalid_argument("Int OverFlow");
 	return (static_cast<int> (f));
 }
