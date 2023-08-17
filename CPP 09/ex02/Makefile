@@ -6,17 +6,17 @@
 #    By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/28 11:10:23 by lflandri          #+#    #+#              #
-#    Updated: 2023/08/17 11:55:00 by lflandri         ###   ########.fr        #
+#    Updated: 2023/08/17 11:52:26 by lflandri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-NAME 		= RPN
+NAME 		= PmergeMe
 
 MAKEFLAGS	= --no-print-directory
 
 SRC 		=	main.cpp\
-				RPN.cpp
+				PmergeMe.cpp
 
 				
 				
