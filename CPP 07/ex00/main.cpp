@@ -6,32 +6,11 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:45:39 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/09 15:33:46 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/22 12:16:24 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "whatever.hpp"
-
-template< typename typ >
-void swap(typ & a, typ & b)
-{
-	typ tempo;
-	tempo = a;
-	a = b;
-	b = tempo;
-}
-
-template< typename typ >
-typ const & max(typ const & a, typ const & b)
-{
-	return (a > b ? a : b);
-}
-
-template< typename typ >
-typ const & min(typ const & a, typ const & b)
-{
-	return (a < b ? a : b);
-}
 
 int main( void ) {
 	int a = 2;
