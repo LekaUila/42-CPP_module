@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 15:18:34 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/09 15:48:50 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/08/24 11:07:00 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,8 @@
 
 
 template < typename T >
-int easyfind( T const & container, int to_find)
+bool easyfind( T const & container, int to_find)
 {
-	int count = 0;
-	for ( typename T::const_iterator i = container.begin(); i != container.end(); i++)
-	{
-		if (*i == to_find)
-			return (count);
-		count++;
-	}
-	return(-1);
+	typename T::const_iterator i = std::find(container.begin(), container.end(), to_find);
+	return (i != container.end());
 }
