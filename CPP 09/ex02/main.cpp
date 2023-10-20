@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 11:47:02 by lflandri          #+#    #+#             */
-/*   Updated: 2023/08/22 16:00:36 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/10/20 18:15:42 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,19 +97,19 @@ int main(int ac, char **av)
 	}
 
 	gettimeofday(&start, NULL);
-	//std::cout << start.tv_usec << std::endl;
+	// std::cout << start.tv_usec << std::endl;
 	PmergeMe::sort_vector(vect);
 	endt = ft_gettime(start);
 
 	
-	std::cout << "sorted in " << endt << " μs." << std::endl;
+	std::cout << "Vector sorted in " << endt << " μs." << std::endl;
 	PmergeMe::print_content_vector(vect);
 
 	gettimeofday(&start, NULL);
 	PmergeMe::sort_deque(deq);
 	endt = ft_gettime(start);
 
-	std::cout << "sorted : " << endt << " μs." << std::endl;
+	std::cout << "Deque sorted : " << endt << " μs." << std::endl;
 	PmergeMe::print_content_deque(deq);
 
 	return (0);
